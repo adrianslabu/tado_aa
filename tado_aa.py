@@ -90,7 +90,7 @@ def homeStatus():
                 printm ("Your home is in AWAY Mode but the device " + devicesHome[0] + " is at home.")
             else:
                 devices = ""
-                for i in range(len(devicesHome) - 1):
+                for i in range(len(devicesHome)):
                     if (i != len(devicesHome) - 1):
                         devices += devicesHome[i] + ", "
                     else:
