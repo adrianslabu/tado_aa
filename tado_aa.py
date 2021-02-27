@@ -194,7 +194,7 @@ def engine():
 def printm(message):
     global lastMessage
     if (message != lastMessage):
-        lastMessage = (message)
+        lastMessage = message
         sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
     
     if (enableLog == True):
