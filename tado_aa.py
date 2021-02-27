@@ -17,6 +17,9 @@ def main():
     global password
     global checkingInterval
     global errorRetringInterval
+    global enableLog
+    global logFile
+
 
     lastMessage = ""
 
@@ -25,6 +28,9 @@ def main():
 
     checkingInterval = 10.0 # checking interval (in seconds)
     errorRetringInterval = 30.0 # retrying interval (in seconds), in case of an error
+
+    enableLog = False # activate the log with "True" or disable it with "False"
+    logFile = "/l.log" # log file location
 
     login()
     homeStatus()
@@ -190,5 +196,14 @@ def printm(message):
     if (message != lastMessage):
         lastMessage = (message)
         sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
+    
+    if (enableLog == True):
+        try:
+            with open(logFile, "a") as log:
+                log.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
+                log.close()
+
+        except Exception as e:
+            sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + str(e) + "\n")
 
 main()
