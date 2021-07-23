@@ -67,11 +67,13 @@ def homeStatus():
         devicesHome = []
 
         for mobileDevice in t.getMobileDevices():
-            if (mobileDevice["location"]["relativeDistanceFromHomeFence"] == 0.0):
-                devicesHome.append(mobileDevice["name"])
+            if (mobileDevice["settings"]["geoTrackingEnabled"] == True):
+                if (mobileDevice["location"] != None):
+                    if (mobileDevice["location"]["relativeDistanceFromHomeFence"] == 0.0):
+                        devicesHome.append(mobileDevice["name"])
 
-        if (lastMessage.find("Connection Error") != -1 or lastMessage.find("Waiting for the user to sign in") != -1):
-            printm ("Connection established, everything looks good now, continuing..\n")
+        if (lastMessage.find("Connection Error") != -1 or lastMessage.find("Waiting for the device location") != -1):
+            printm ("Successfully got the location, everything looks good now, continuing..\n")
 
         if (len(devicesHome) > 0 and homeState == "HOME"):
             if (len(devicesHome) == 1):
@@ -118,7 +120,7 @@ def homeStatus():
 
     except Exception as e:
         if (str(e).find("location") != -1):
-            printm ("I cannot get the location of one of the devices because the user signed out from tado app.\nWaiting for the user to sign in, until then the Geofencing Assist is NOT active.\nWaiting for an open window..")
+            printm ("I cannot get the location of one of the devices because the Geofencing is off or the user signed out from tado app.\nWaiting for the device location, until then the Geofencing Assist is NOT active.\nWaiting for an open window..")
             time.sleep(1)
             engine()
         elif (str(e).find("NoneType") != -1):
@@ -147,12 +149,16 @@ def engine():
             #Geofencing
             homeState = t.getHomeState()["presence"]
 
-            for mobileDevice in t.getMobileDevices():
-                if (mobileDevice["location"]["relativeDistanceFromHomeFence"] == 0.0):
-                    devicesHome.append(mobileDevice["name"]) 
+            devicesHome.clear()
 
-            if (lastMessage.find("Connection Error") != -1 or lastMessage.find("Waiting for the user to sign in") != -1):
-                printm ("Connection established, everything looks good now, continuing..\n")
+            for mobileDevice in t.getMobileDevices():
+                if (mobileDevice["settings"]["geoTrackingEnabled"] == True):
+                    if (mobileDevice["location"] != None):
+                        if (mobileDevice["location"]["relativeDistanceFromHomeFence"] == 0.0):
+                            devicesHome.append(mobileDevice["name"])
+
+            if (lastMessage.find("Connection Error") != -1 or lastMessage.find("Waiting for the device location") != -1):
+                printm ("Successfully got the location, everything looks good now, continuing..\n")
                 printm ("Waiting for a change in devices location or for an open window..")
 
             if (len(devicesHome) > 0 and homeState == "AWAY"):
@@ -185,7 +191,7 @@ def engine():
 
         except Exception as e:
                 if (str(e).find("location") != -1 or str(e).find("NoneType") != -1):
-                    printm ("I cannot get the location of one of the devices because the user signed out from tado app.\nWaiting for the user to sign in, until then the Geofencing Assist is NOT active.\nWaiting for an open window..")
+                    printm ("I cannot get the location of one of the devices because the Geofencing is off or the user signed out from tado app.\nWaiting for the device location, until then the Geofencing Assist is NOT active.\nWaiting for an open window..")
                     time.sleep(checkingInterval)
                 else:
                     printm (str(e) + "\nConnection Error, retrying in " + str(errorRetringInterval) + " sec..")
@@ -193,11 +199,8 @@ def engine():
 
 def printm(message):
     global lastMessage
-    if (message != lastMessage):
-        lastMessage = message
-        sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
     
-    if (enableLog == True):
+    if (enableLog == True and message != lastMessage):
         try:
             with open(logFile, "a") as log:
                 log.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
@@ -206,4 +209,7 @@ def printm(message):
         except Exception as e:
             sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + str(e) + "\n")
 
+    if (message != lastMessage):
+        lastMessage = message
+        sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
 main()
