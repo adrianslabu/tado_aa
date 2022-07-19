@@ -69,7 +69,7 @@ def homeStatus():
         for mobileDevice in t.getMobileDevices():
             if (mobileDevice["settings"]["geoTrackingEnabled"] == True):
                 if (mobileDevice["location"] != None):
-                    if (mobileDevice["location"]["relativeDistanceFromHomeFence"] == 0.0):
+                    if (mobileDevice["location"]["atHome"] == True):
                         devicesHome.append(mobileDevice["name"])
 
         if (lastMessage.find("Connection Error") != -1 or lastMessage.find("Waiting for the device location") != -1):
@@ -154,7 +154,7 @@ def engine():
             for mobileDevice in t.getMobileDevices():
                 if (mobileDevice["settings"]["geoTrackingEnabled"] == True):
                     if (mobileDevice["location"] != None):
-                        if (mobileDevice["location"]["relativeDistanceFromHomeFence"] == 0.0):
+                        if (mobileDevice["location"]["atHome"] == True):
                             devicesHome.append(mobileDevice["name"])
 
             if (lastMessage.find("Connection Error") != -1 or lastMessage.find("Waiting for the device location") != -1):
