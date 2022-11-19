@@ -23,14 +23,17 @@ def main():
 
     lastMessage = ""
 
-    username = "your_username@mail.com" # tado username
-    password = "your_password" # tado password
+    #Settings
+    #--------------------------------------------------
+    username = "your_tado_username" # tado username
+    password = "your_tado_password" # tado password
 
     checkingInterval = 10.0 # checking interval (in seconds)
     errorRetringInterval = 30.0 # retrying interval (in seconds), in case of an error
 
     enableLog = False # activate the log with "True" or disable it with "False"
     logFile = "/l.log" # log file location
+    #--------------------------------------------------
 
     login()
     homeStatus()
@@ -133,10 +136,8 @@ def homeStatus():
 
 def engine():
 
-    i = 0
-    while i < 3: # My solution to fix the "stack depth"
+    while(True):
         try:
-            i = 0
             #Open Window Detection
             for z in t.getZones():
                     zoneID = z["id"]
