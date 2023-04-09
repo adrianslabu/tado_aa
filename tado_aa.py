@@ -15,6 +15,7 @@ def main():
     global lastMessage
     global username
     global password
+    global minTemp, maxTemp, enableTempLimit
     global checkingInterval
     global errorRetringInterval
     global enableLog
@@ -30,7 +31,9 @@ def main():
 
     checkingInterval = 10.0 # checking interval (in seconds)
     errorRetringInterval = 30.0 # retrying interval (in seconds), in case of an error
-
+    minTemp = 5 # minimum allowed temperature, applicable only if enableTempLimit is "TRUE"
+    maxTemp = 25 # maximum allowed temperature, applicable only if enableTempLimit is "TRUE"
+    enableTempLimit = True # activate min and max temp limit with "True" or disable it with "False"
     enableLog = False # activate the log with "True" or disable it with "False"
     logFile = "/l.log" # log file location
     #--------------------------------------------------
@@ -114,6 +117,7 @@ def homeStatus():
 
         devicesHome.clear()
         printm ("Waiting for a change in devices location or for an open window..")
+        printm ("Temp Limit is {0}, min Temp({1}) and max Temp({2})".format("ON" if (enableTempLimit) else "OFF", minTemp, maxTemp))
         time.sleep(1)
         engine()
 
@@ -147,6 +151,19 @@ def engine():
                         t.setOpenWindow(zoneID)
                         printm ("Done!")
                         printm ("Waiting for a change in devices location or for an open window..")
+            #Temp Limit
+                    if (enableTempLimit == True):
+                        if (t.getState(zoneID)['setting']['power'] == "ON"):
+                            setTemp = t.getState(zoneID)['setting']['temperature']['celsius']
+                            currentTemp = t.getState(zoneID)['sensorDataPoints']['insideTemperature']['celsius']
+
+                            if (float(setTemp) > float(maxTemp)):
+                                t.setZoneOverlay(zoneID,0,maxTemp)
+                                printm("{0}: Set Temp ({1}) is higher than the desired max Temp({2}), set {0} to {2} degrees!".format(zoneName, setTemp, maxTemp))
+                            elif (float(setTemp) < float(minTemp)):
+                                t.setZoneOverlay(zoneID,0,minTemp)
+                                printm("{0}: Set Temp ({1}) is lower than the desired min Temp({2}), set {0} to {2} degrees!".format(zoneName, setTemp, minTemp))
+                
             #Geofencing
             homeState = t.getHomeState()["presence"]
 
