@@ -231,6 +231,7 @@ def printm(message):
         except Exception as e:
             sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + str(e) + "\n")
 
+    if (message != lastMessage):
         lastMessage = message
         sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
 
