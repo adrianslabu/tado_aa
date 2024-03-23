@@ -26,7 +26,7 @@ To install and start the Tado Auto-Assist Service, follow these steps:
    - use arrows to navigate to the desired line and change `username` and `password` with your Tado username and password
    - press `Ctrl` + `x` simultaneously, don't change the file name, now just press `enter` to save it
 
-4. Run the installation script (in case of error run `sudo chmode +x install.sh` and retry):
+4. Run the installation script (in case of error run `sudo chmod +x install.sh` and retry):
    - `./install.sh`
 
 This will set up the service to run automatically and start it immediately.
