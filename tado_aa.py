@@ -158,7 +158,7 @@ def engine():
                         printm ("Waiting for a change in devices location or for an open window..")
             #Temp Limit
                     if (enableTempLimit == True):
-                        if (t.get_state(zoneID)['setting']['power'] == "ON"):
+                        if (t.get_state(zoneID)['setting']['type'] == 'HEATING' and t.get_state(zoneID)['setting']['power'] == "ON"):
                             setTemp = t.get_state(zoneID)['setting']['temperature']['celsius']
                             currentTemp = t.get_state(zoneID)['sensorDataPoints']['insideTemperature']['celsius']
 
