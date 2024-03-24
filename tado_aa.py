@@ -19,9 +19,8 @@ def main():
     global minTemp, maxTemp, enableTempLimit
     global checkingInterval
     global errorRetringInterval
-    global enableLog
+    global saveLog
     global logFile
-    global enableLogRotation
     global maxLines
 
 
@@ -37,10 +36,9 @@ def main():
     minTemp = 5 # minimum allowed temperature, applicable only if enableTempLimit is "TRUE"
     maxTemp = 25 # maximum allowed temperature, applicable only if enableTempLimit is "TRUE"
     enableTempLimit = True # activate min and max temp limit with "True" or disable it with "False"
-    enableLog = False # activate the log with "True" or disable it with "False"
-    logFile = "/l.log" # log file location
-    enableLogRotation = False
-    maxLines = 50 #log maximum number of lines
+    saveLog = False # enable log saving with "True" or disable it with "False"
+    logFile = "/logfile.log" # log file location (if you are using backslashes please add "r" before quotation mark like so: r"\tado_aa\logfile.log")
+    maxLines = 50 # log maximum number of lines
     #--------------------------------------------------
 
     login()
@@ -223,33 +221,34 @@ def engine():
 def printm(message):
     global lastMessage
 
-    if enableLog and message != lastMessage:
-        try:
-            with open(logFile, "a") as log:
-                log.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
-                log.close()
-        except Exception as e:
-            sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + str(e) + "\n")
-
-        lastMessage = message
+    if (message != lastMessage):
         sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
 
-        # Check the number of lines in the log file
-        if enableLogRotation and count_lines(logFile) >= maxLines:
-            rotate_log()
+        if (saveLog == True):
+            try:
+                with open(logFile, "a") as log:
+                    log.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + message + "\n")
+                    log.close()
+            except Exception as e:
+                sys.stdout.write(datetime.now().strftime('%d-%m-%Y %H:%M:%S') + " # " + str(e) + "\n")
+
+            # Check the number of lines in the log file
+            if (count_lines(logFile) >= maxLines):
+                rotate_log()
+
+        lastMessage = message
 
 def count_lines(file_path):
     with open(file_path) as file:
         return sum(1 for line in file)
 
 def rotate_log():
-    global logFile
     # Create a new log file with a timestamp
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-    new_log_file = f"your_log_file_{timestamp}.log"
+    new_logFile = logFile.replace(".log", f"_{timestamp}.log")
     
     # Close the current log file and rename it
-    os.rename(logFile, new_log_file)
+    os.rename(logFile, new_logFile)
     
     # Open a new log file
     with open(logFile, "w"):
