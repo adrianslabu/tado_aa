@@ -21,12 +21,7 @@ To install and start the Tado Auto-Assist Service, follow these steps:
 2. Navigate to the cloned directory:
    - `cd tado_aa`
 
-3. Edit `tado_aa.py` using a text editor, in this exemple I will use `nano` (to check if it's installed run `sudo apt install nano`, in case it isn't it will ask if you want to install it, press `y` to confirm.):
-   - `nano tado_aa.py`
-   - use arrows to navigate to the desired line and change `username` and `password` with your Tado username and password
-   - press `Ctrl` + `x` simultaneously, don't change the file name, now just press `enter` to save it
-
-4. Run the installation script (in case of error run `sudo chmod +x install.sh` and retry):
+3. Run the installation script (in case of error run `sudo chmod +x install.sh` and retry):
    - `./install.sh`
 
 This will set up the service to run automatically and start it immediately.
