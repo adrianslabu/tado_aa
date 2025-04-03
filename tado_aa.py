@@ -11,7 +11,7 @@ import time
 import inspect
 
 from datetime import datetime
-from PyTado.interface.interface import Tado
+from PyTado.interface import Tado
 
 def main():
 
