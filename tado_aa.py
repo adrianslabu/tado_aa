@@ -59,7 +59,6 @@ def login():
             url = t.device_verification_url()
             print(f"Please visit this URL to authenticate:\n")
             print(f'{url}')
-            input("\nAfter logging in, press Enter to continue...")
             t.device_activation()
             status = t.device_activation_status()
 
