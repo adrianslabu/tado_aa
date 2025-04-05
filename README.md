@@ -5,15 +5,18 @@ In addition, it offers the possibility to configure the minimum and maximum temp
 
 ## Prerequisites
 
-- Python 3
+- Python 3, install it using:
+  `sudo apt install python3`
+- Pip, install it using:
+  `sudo apt install python3-pip`
 - PyTado: This script relies on PyTado. Install it using:
   `pip3 install python-tado`
 
 This script was made possible because of PyTado's author, Chris Jewell (chrism0dwk@gmail.com), and the person who modified it, Wolfgang Malgadey (wolfgang@malgadey.de).
 
-## Installation
+## Running the script
 
-To install and start the Tado Auto-Assist Service, follow these steps:
+After installing Python3, pip and python-tado (Check Prerequisites) to download the script and run it, follow these steps:
 
 1. Clone the repository using `git` (to check if it's installed run `sudo apt install git`, in case it isn't it will ask if you want to install it, press `y` to confirm):
    - `git clone https://github.com/adrianslabu/tado_aa`
@@ -21,10 +24,10 @@ To install and start the Tado Auto-Assist Service, follow these steps:
 2. Navigate to the cloned directory:
    - `cd tado_aa`
 
-3. Run the installation script (in case of error run `sudo chmod +x install.sh` and retry):
-   - `./install.sh`
+3. Run the script:
+   - `python3 tado_aa.py`
 
-This will set up the service to run automatically and start it immediately.
+4. The script will provide you with an authentication URL, which you need to open in any browser (phone, tablet, or PC). Log in using your Tado email and password. After authentication, the script will continue running.
 
 ## If you want to thank me
 
